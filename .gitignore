@@ -1,0 +1,8 @@
+# 会话/工具产物
+.DS_Store
+.mimosa/
+.v2c/
+.video_agent/
+*.zcode-session
+
+# 本项目暂无构建产物(纯文档);后续工程目录由各自 .gitignore 管辖
