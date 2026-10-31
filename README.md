@@ -1,48 +1,183 @@
-# YYC3-LeisureManage · 艺人管理小程序 开发落地指导架构
+<div align="center">
 
-> 版本:v1.0(2026-11-01)|项目代号:LeisureManage|归属:YYC3 娱乐平台线
-> 依据:智慧商家(厦门巨嗨)App「艺人管理」模块 25 子模块全量实抓 + PC 端配置/报表清单(取证规格书归档:`/Users/yanyu/YANYUCLOUDCUBE/My-经管运维-智能协同/My-运维转型-娱乐平台/智慧商家-双端功能体系与操作手册/05-艺人管理小程序-开发规格书.md`)
-> 定位:**对齐现有系统能力的独立小程序重构**,支持单店起步、连锁扩展。
+<img src="public/yyc3-family.png" alt="YYC³ 家族品牌顶图" title="YanYuCloudCube · 言启象限 | 语枢未来" />
+
+# YYC³ LeisureManage
+
+**独立运营的多门店艺人管理系统 · 四端一核 · 流水不可变 · 营业日 08:00 日切**
+
+`KTV / 商务会所 / 夜总会` `艺人(技师)管理` `多门店 SaaS 化` `台费账户` `上下钟计费` `微信小程序艺人端`
+
+<!-- ━━ ① 实时状态（GitHub Actions 直出 · push 自动刷新）━━ -->
+[![CI 文档门禁](https://github.com/YYC-Cube/YYC3-LeisureManage/actions/workflows/ci.yml/badge.svg)](https://github.com/YYC-Cube/YYC3-LeisureManage/actions/workflows/ci.yml)
+
+<!-- ━━ ② 规划基线（docs 实证快照）━━ -->
+[![需求全集](https://img.shields.io/badge/%E9%9C%80%E6%B1%82%E5%85%A8%E9%9B%86-V3.0%20%C2%B7%2028%E8%8F%9C%E5%8D%95%20%C2%B7%20%E5%85%AB%E5%A4%A7%E4%B8%9A%E5%8A%A1%E5%9F%9F-blue)](docs/YYC3-LeisureManage-项目规划/YYC3-LeisureManage.md)
+[![工程规划](https://img.shields.io/badge/%E5%B7%A5%E7%A8%8B%E8%A7%84%E5%88%92-01%E2%80%9311%20%E5%8F%B7%E6%96%87%E6%A1%A3%20%C2%B7%20%E8%A3%B1%E5%86%B3%E4%BF%AE%E8%AE%A2-blueviolet)](docs/YYC3-LeisureManage-项目规划/README.md)
+[![领域单源](https://img.shields.io/badge/%E9%A2%86%E5%9F%9F%E5%8D%95%E6%BA%90-leisure--core%20%C2%B7%20tsc%20strict%20%E9%80%9A%E8%BF%87-success)](https://github.com/YYC-Cube/YYC3-DeepStack-Matrix/tree/main/packages/leisure-core)
+[![资金红线](https://img.shields.io/badge/%E8%B5%84%E9%87%91%E7%BA%A2%E7%BA%BF-%E6%B5%81%E6%B0%B4%E5%8F%AA%E5%A2%9E%E4%B8%8D%E6%94%B9%20%C2%B7%20REVERSE%20%E5%86%B2%E6%AD%A3-critical)](docs/YYC3-LeisureManage-项目规划/06-权限与安全设计.md)
+
+<!-- ━━ ③ 技术栈 ━━ -->
+![React](https://img.shields.io/badge/React-19-149ECA?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
+![Taro](https://img.shields.io/badge/Taro-4-2C7DE9?logo=taro&logoColor=white)
+![NestJS](https://img.shields.io/badge/NestJS-10-E0234E?logo=nestjs&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?logo=prisma&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?logo=mysql&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-7-DC382D?logo=redis&logoColor=white)
+
+<!-- ━━ ④ 工程与安全 ━━ -->
+![Node](https://img.shields.io/badge/Node-%E2%89%A522-339933?logo=nodedotjs&logoColor=white)
+![pnpm](https://img.shields.io/badge/pnpm-workspace-F69220?logo=pnpm&logoColor=white)
+![Vitest](https://img.shields.io/badge/Vitest-%E5%88%86%E7%89%87-6E9F18?logo=vitest&logoColor=white)
+[![License](https://img.shields.io/badge/license-MIT-grey)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](https://github.com/YYC-Cube/YYC3-LeisureManage/pulls)
+
+<!-- ━━ ⑤ 社区治理 ━━ -->
+[![Contributor Covenant](https://img.shields.io/badge/Contributor_Covenant-v2.1-4c1.svg)](CODE_OF_CONDUCT.md)
+[![贡献指南](https://img.shields.io/badge/%E8%B4%A1%E7%8C%AE%E6%8C%87%E5%8D%97-CONTRIBUTING-blue)](CONTRIBUTING.md)
+[![安全政策](https://img.shields.io/badge/%E5%AE%89%E5%85%A8%E6%94%BF%E7%AD%96-SECURITY.md-2ea44f)](SECURITY.md)
+
+</div>
 
 ---
 
-## 文档导览
+> **Words Initiate Quadrants, Language Serves as Core for the Future**
+> **万象归元于云枢 · 深栈智启新纪元**
 
-| 序号 | 文档 | 内容 | 读者 |
-|---|---|---|---|
-| 01 | [PRD-产品需求文档](01-PRD-产品需求文档.md) | 背景、角色、功能需求 FR 编号全表、业务规则红线、非功能需求 | 产品/开发/测试 |
-| 02 | [系统架构设计](02-系统架构设计.md) | 总体架构、技术选型、服务划分、集成架构、部署拓扑 | 架构/后端/运维 |
-| 03 | [数据库设计](03-数据库设计.md) | ER 关系 + MySQL 全表 DDL + 索引/约束策略 | 后端/DBA |
-| 04 | [API接口设计](04-API接口设计.md) | REST 接口全清单(按域)、鉴权、幂等、错误码 | 前后端 |
-| 05 | [页面清单与交互规格](05-页面清单与交互规格.md) | 管理端 26 页(A1–A26;阶段3 先行 A1–A19)+ 艺人端 4 页逐页规格(实测字段对齐) | 前端/产品 |
-| 06 | [权限与安全设计](06-权限与安全设计.md) | RBAC 矩阵、资金红线、敏感数据加密、审计 | 后端/安全 |
-| 07 | [开发计划与里程碑](07-开发计划与里程碑.md) | 三期排期、工作量估算、风险登记 | 项目经理 |
-| 08 | [测试与验收清单](08-测试与验收清单.md) | 六大业务流验收用例 + 回归清单 | 测试 |
-| 09 | [YYC3资产复用与四端技术栈方案](09-YYC3资产复用与四端技术栈方案.md) | DeepStack-Matrix 资产盘点(ui/theme/core/shell/PWA)· 四端选型(Web/PWA/小程序/桌面)· 行动清单 | 架构/前端 |
-| 10 | [后端服务完整规划](10-后端服务完整规划.md) | NestJS 工程结构·逐模块事务规格·定时任务·配置矩阵·横切(幂等/审计/异常映射)·部署 | 后端 |
-| 11 | [数据库完整规划](11-数据库完整规划.md) | 全量表清单+补齐 DDL·迁移策略(Prisma)·索引/分区/归档·容量估算·种子数据·备份容灾·账号最小化 | 后端/DBA |
-| ⭐ | [PROMPT-新会话-全栈开发落地](PROMPT-新会话-全栈开发落地.md) | **新建会话提示词**(整段复制即用):六阶段全栈实施顺序·铁律·环境注意事项·阶段门禁 | 全员 |
+**YYC³ LeisureManage** 是面向 **KTV / 商务会所 / 夜总会** 门店的**独立运营多门店艺人（技师）管理系统**：覆盖艺人档案、考勤报备、上下钟计费、台费账户、台票体系、订单预约、服务评价与财务对账全流程。**2026-11-01 定位裁决：完全脱离「智慧商家」（厦门巨嗨）体系，零集成零联动**——行业产品实测仅作为历史需求考察来源。
 
-## 领域单源包(已建)
+---
 
-**`@yyc3/leisure-core`** → 实际代码位于 `YYC3-DeepStack-Matrix/packages/leisure-core/`(pnpm workspace 已覆盖 `packages/*`):
-- 营业日计算(`resolveBusinessDate`,08:00 日切口径)、台费引擎(`resolveStageFeeRule`/`calcSessionFee`/`assertCanTakeSession`,含"串台 0=不允许"等实测语义)、台票校验、流水/报备/状态枚举、传输层注入式 API Client(幂等键内置)
-- 四端共同 import:**任何端不得复制实现领域逻辑**
-- 验证:`cd packages/leisure-core && pnpm install && pnpm type-check && pnpm test`(类型检查已通过 tsc 严格模式;vitest 用例:营业日口径/计费快照/串台上限/台票过期/枚举冒烟)
+## 目录
 
-## 一句话架构
+1. [项目定位与铁律](#一项目定位与铁律)
+2. [四端一核拓扑](#二四端一核拓扑)
+3. [核心业务域](#三核心业务域)
+4. [快速开始](#四快速开始)
+5. [文档体系索引](#五文档体系索引)
+6. [图文可视化体系](#六图文可视化体系)
+7. [社区与贡献](#七社区与贡献)
 
-> **微信小程序(艺人端) + Web 管理后台(店端) + 开放 API(主系统联动)**,后端单体起步按域分模块,MySQL 存储,资金流水只增不改,营业日 08:00 日切全局统一。
+---
 
-## 项目铁律(从实测系统继承)
+## 一、项目定位与铁律
 
-1. **台费 = 艺人薪酬资金流**:充值/扣费双流水只增不改;手动扣费必须备注+审批(高额)
-2. **微信身份全局唯一**:一微信仅绑一店档案;跨店转移需二次确认并留删除日志(主系统为自动删除,本项目升级为可配置)
-3. **营业日 08:00 日切**:全部流水/报表/汇总按营业日归集
-4. **身份证/照片 = 敏感个人信息**:加密存储、展示脱敏、访问留痕
-5. **危险操作二次确认**:房态/资金/删除类动作一律 confirm 弹窗(继承实测系统交互)
+**独立运营**：自有门店/房型/订单/账务闭环，多门店 `store_id` 数据隔离、门店级参数配置（日切时刻/审批阈值/转移策略/计费规则），预留连锁总部视图；不做任何第三方 KTV 主系统集成。
 
-## 与主系统(智慧商家)关系
+**五条项目铁律**（违反即返工，全表见 [规划导览](docs/YYC3-LeisureManage-项目规划/README.md)）：
 
-- **独立部署、协议对接**:本项目不侵入主系统;通过集成层同步 门店/包厢类型/账单事件/支付结果
-- **可替换主系统**:数据模型完整自洽,脱离巨嗨亦可独立运营(连锁自持场景)
+| # | 铁律 |
+| --- | --- |
+| 1 | **台费 = 艺人薪酬资金流**：充值/扣费双流水只增不改；冲正走 REVERSE 反向流水；手动扣费备注必填 + ≥阈值审批（审批人≠申请人） |
+| 2 | **微信身份全局唯一**：一微信仅绑一店档案；跨店转移走人工工单（可配自动），全量留痕 `wechat_bind_log` |
+| 3 | **营业日 08:00 日切**：全部流水/报表按 `business_date` 归集，服务端按门店日切时刻计算，客户端只预览 |
+| 4 | **敏感个人信息合规**：身份证号 AES-256-GCM 加密、展示脱敏、访问留痕；照片 OSS 私有桶短时签名 URL |
+| 5 | **危险操作二次确认**：资金/房态/删除类动作一律 confirm 弹窗，文案具体化（如「确认扣费 ¥200」） |
+
+## 二、四端一核拓扑
+
+```mermaid
+graph TB
+    subgraph Clients["🖥️ 四端触点"]
+        WEB["Web 管理端 A1–A26<br/>React 19 + @yyc3/ui + @yyc3/shell"]
+        PWA["PWA 移动端<br/>收银/主管(同一工程响应式)"]
+        MP["微信小程序<br/>Taro 4 + React(艺人端 B1–B4)"]
+        DESK["桌面端(可选)<br/>Electron"]
+    end
+
+    CORE(["🧠 领域单源 @yyc3/leisure-core<br/>营业日 08:00 日切 · 台费引擎(规则快照/串台上限)<br/>上钟前置校验 · 台票校验 · 枚举 · 幂等 API Client"])
+
+    API["⚙️ leisure-api(NestJS 10 · 模块化单体)<br/>auth · artist · attendance · session · stage-fee<br/>ticket · approval · report · payment"]
+
+    subgraph Data["💾 数据层"]
+        MYSQL[("MySQL 8<br/>流水月分区 · 只增不改")]
+        REDIS[("Redis 7<br/>实时看板 · BullMQ")]
+        OSS[("OSS<br/>加密照片/备份")]
+    end
+
+    WEB --> API
+    PWA --> API
+    MP --> API
+    DESK --> API
+    WEB -.领域逻辑.-> CORE
+    MP -.领域逻辑.-> CORE
+    API -.计算单源.-> CORE
+    API --> MYSQL
+    API --> REDIS
+    API --> OSS
+
+    style CORE fill:#f9f,stroke:#333,stroke-width:2px
+```
+
+> **领域单源铁律**：任何端**禁止复制实现**营业日/计费/前置校验/枚举，只能 `import '@yyc3/leisure-core'`（位于姊妹仓 [YYC3-DeepStack-Matrix](https://github.com/YYC-Cube/YYC3-DeepStack-Matrix) `packages/leisure-core`，tsc 严格模式通过 + vitest 用例在位）。
+
+## 三、核心业务域
+
+| 业务域 | 能力要点 |
+| --- | --- |
+| 档案与基础信息 | 94 字段档案/组别/等级/腰牌号店内唯一/批量设置/软删/注册二维码/自助绑定 |
+| 考勤与报备 | 扫码签到签退(定位)/九类报备类型/明细+汇总矩阵/补打卡/实时状态色点看板 |
+| 场次与台费 | 上钟选包厢房号/小时计费+超时15分钟进位/规则快照/串台校验/手动扣费审批/流水三查 |
+| 台票体系 | 票种规则/购买(现金·抖音)/核销抵扣/双流水/过期任务 |
+| 订单·预约·评价 | 自有订单闭环/预约状态机/服务评价回收 |
+| 多门店参数 | 艺人设置 8 项按店隔离:必填项/报备规则/签退时限/计费规则/上钟模式 |
+| 报表中心 | 10 张报表对齐行业清单,统一营业日口径 + 包厢维度,导出/打印 |
+
+## 四、快速开始
+
+> 本仓库当前为**规划文档库**（设计已冻结,工程六阶段落位中）。克隆浏览文档：
+
+```bash
+git clone https://github.com/YYC-Cube/YYC3-LeisureManage.git
+cd YYC3-LeisureManage
+open docs/YYC3-LeisureManage-项目规划/README.md   # 从导览进入 00 需求全集 + 01–11 工程规划
+
+bash scripts/verify-docs.sh                       # 本地文档门禁(对齐 CI)
+```
+
+**工程落位**（代码在姊妹仓 DeepStack-Matrix,六阶段执行详见 [PROMPT](docs/YYC3-LeisureManage-项目规划/PROMPT-新会话-全栈开发落地.md)）：
+
+| 阶段 | 交付 | 门禁 |
+| --- | --- | --- |
+| 1 后端骨架 | NestJS+Prisma+seed / auth·artist·attendance | e2e 绿 |
+| 2 场次与资金 | 上下钟两段式事务 / 审批 / 日切 job | 核心链路演示脚本全绿 |
+| 3 Web 管理端 | A1–A19 页面 + shell 壳层 | 页面走查 · ui 组件占比≥80% |
+| 4 PWA | manifest + BottomNav + 报备现场屏 | Lighthouse PWA ≥90 |
+| 5 艺人小程序 | B1 注册绑定 / B2 扫码签到签退 / B4 我的流水 | 真机三链路通 |
+| 6 报表+联调 | 7 张 MVP 报表 + ★ 用例自动化 | 覆盖 ≥90% |
+
+## 五、文档体系索引
+
+| 文档 | 内容 |
+| --- | --- |
+| [📄 完整需求文档 V3.0](docs/YYC3-LeisureManage-项目规划/YYC3-LeisureManage.md) | **需求全集**：28 项菜单/八大业务域/包厢房号管理/小时计费+超时15分钟进位/艺人设置8项/移动端四Tab/同赛道开源对标 |
+| [🗺️ 项目规划导览](docs/YYC3-LeisureManage-项目规划/README.md) | 00–11 + PROMPT 全套导览、独立运营定位、项目铁律 |
+| [🏗️ 工程规划 01–11](docs/YYC3-LeisureManage-项目规划/README.md#文档导览) | PRD / 架构 / 库表 / API / 页面 26+4 / 权限安全 / 计划 / 测试 / 技术栈 / 后端 / 数据库 |
+| [⭐ PROMPT 全栈落地](docs/YYC3-LeisureManage-项目规划/PROMPT-新会话-全栈开发落地.md) | 新建开发会话提示词：六阶段顺序·铁律·环境注意事项·阶段门禁 |
+| [🎨 可视化交互体系设计](docs/YYC3-LeisureManage-可视化交互体系设计.md) | 品牌视觉资产/徽章体系/Mermaid 图集/四端交互规范/文档视觉治理 |
+| [📐 团队标规随仓副本](docs/YYC3-团队通用-标准规范/) | 开发文档/标规文档/验收体系参照(修订以团队真身为准) |
+
+## 六、图文可视化体系
+
+本仓库的可视化语言（顶图/徽章/架构图/交互规范）统一由 [《可视化交互体系设计》](docs/YYC3-LeisureManage-可视化交互体系设计.md) 治理：品牌四行署名块、shields 五行徽章位、Mermaid 架构图集（四端拓扑/业务闭环/计费流程/艺人状态机）、以及资金红线类页面的交互规范（负数红字/危险确认弹窗/色点看板）。
+
+## 七、社区与贡献
+
+- 🤝 贡献流程与文档修订规则：[CONTRIBUTING.md](CONTRIBUTING.md)
+- 📜 行为准则：[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+- 🔐 漏洞报告（请勿公开 Issue）：<security@0379.email>，详见 [SECURITY.md](SECURITY.md)
+- 💬 一般协作：[GitHub Issues](https://github.com/YYC-Cube/YYC3-LeisureManage/issues)
+
+---
+
+<div align="center">
+
+> ***YanYuCloudCube***
+> *言启象限 | 语枢未来*
+> ***Words Initiate Quadrants, Language Serves as Core for Future***
+> *万象归元于云枢 | 深栈智启新纪元*
+
+**© 2025-2026 YanYuCloudCube™. All Rights Reserved.**
+
+</div>

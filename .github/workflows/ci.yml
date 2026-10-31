@@ -1,0 +1,22 @@
+# YYC³ LeisureManage · CI 文档门禁
+# 与本地 scripts/verify-docs.sh 同源:四件套在位/顶图/Front Matter/死链/署名块
+name: CI 文档门禁
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  docs-gate:
+    name: 文档门禁 (G1-G5)
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 执行文档门禁
+        run: bash scripts/verify-docs.sh
