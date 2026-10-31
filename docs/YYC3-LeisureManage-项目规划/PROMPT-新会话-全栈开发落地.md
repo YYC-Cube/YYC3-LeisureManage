@@ -16,15 +16,24 @@ YYC3-LeisureManage 为**独立运营的多门店艺人管理系统**(2026-11-01 
 
 已完成并可直接使用的资产:
 1. 【设计文档全套】/Users/yanyu/YYC-Cube/personal/YYC3-LeisureManage/docs/YYC3-LeisureManage-项目规划/
-   - README.md(导览+项目铁律+独立运营定位)· YYC3-LeisureManage.md(需求全集 V3.0:28项菜单/包厢房号管理/小时计费+超时15分钟进位/艺人设置8项)
+   - README.md(导览+项目铁律+独立运营定位)· YYC3-LeisureManage.md(需求全集 V3.0:28项菜单/包厢房号管理/小时计费+可配置进位阈值/艺人设置8项/开源对标)
    - 01-PRD(FR-A1~G5 需求编号) · 02-系统架构 · 03-数据库设计(基础DDL)
    - 04-API接口设计(REST 全清单+错误码 40901~50001) · 05-页面清单与交互规格(管理端26页+艺人端4页)
    - 06-权限与安全(RBAC 功能码) · 07-开发计划(10周MVP) · 08-测试与验收(用例编号)
    - 09-YYC3资产复用与四端技术栈 · 10-后端服务完整规划(NestJS 逐模块事务规格) · 11-数据库完整规划(生产级DDL+迁移+容量)
+   - 本目录即开源仓 github.com/YYC-Cube/YYC3-LeisureManage 的工作区:规划文档变更走该仓提交,CI 文档门禁(G1-G5)须绿
 2. 【领域单源包(已建,类型检查通过)】/Users/yanyu/YYC-Cube/personal/YYC3-DeepStack-Matrix/packages/leisure-core/
    - @yyc3/leisure-core:营业日计算(08:00日切)/台费引擎(等级×房型规则快照+FLAT|HOURLY)/上钟前置校验/台票校验/流水与报备枚举/传输层注入式 API Client(幂等键内置)
    - 子模块:types / constants / errors / business-day / stage-fee / ticket / api-client;test/core.test.ts(vitest 用例已备)
    - ⚠️ 这是四端数据一致性锚点:任何端禁止复制实现领域逻辑,只能 import 本包
+   - ⚠️ 现行 HOURLY 为"按分钟折算×时薪",无进位阈值——阶段0 须按需求全集 §6 升级为进位阈值计费(阈值 N 参数化)
+3. 【需求全集(V3.0)相对 01-11 的增量——工程执行必须吸收;与 01-11 冲突时以需求全集+文档最新修订头为准】
+   - 包厢房号实体 room(§5):房号店内唯一;状态=空闲/占用/维修/停用;上钟必选房号→带出房型匹配单价;占用/空闲随上下钟自动流转;停用/维修不可选——03/11 号 DDL 未含,阶段1 建 schema 时补
+   - 计费主模式(§6):小时计费当前启用,一口价(FLAT)预留;进位阈值 N 门店级可自定义编辑(默认15分钟,10 号矩阵 BILL_ROUNDING_MINUTES);进行中场次按上钟时快照阈值计
+   - 艺人设置 8 项(§7)按门店隔离:资料必填项/报备规则/签到后可签退时限/扫码下钟开关/未签到上钟开关/台票购买/包厢计费规则/上钟模式(轮台|自选|混合)——配置优先级:门店级 > 全局 env 默认
+   - 档案审核状态(§3):等待审核/审核未通过/审核通过;审核通过才对外展示
+   - 报表字段(§8.3):台费扣款明细/流水汇总/上下钟明细/上下钟汇总 4 张报表增加 包厢房号+包厢类型 维度
+   - §11 移动端四Tab 与 §12 P0 对标缺失项(钟房大屏/计时状态机/时段定价/离线兜底/硬件联动)为 II/III 期参照,**不入本期 MVP 六阶段**
 
 # 技术栈(已定,不得更换)
 - Web 管理端:React 19 + Vite 8 + react-router 7 + zustand 5 + Tailwind 4 + TS 5.9;UI 用 @yyc3/ui(shadcn/radix 49件)+ @yyc3/shell(Sidebar/RequireRole/CommandPalette/BottomNav)——同仓库 apps/ 下已有 app-web-full 可作工程骨架参照
@@ -34,12 +43,12 @@ YYC3-LeisureManage 为**独立运营的多门店艺人管理系统**(2026-11-01 
 
 # 本次任务:全栈开发落地(按顺序执行,每阶段结束停下汇报)
 阶段0 阅读:先读 docs/YYC3-LeisureManage-项目规划/ 的 README(导览)与 02/10/11 号文档及 YYC3-LeisureManage.md(需求全集,注意第六章「小时计费+进位阈值」须并入 leisure-core 计费引擎——阈值 N 门店级可自定义编辑,默认15分钟,须参数化实现),再浏览 leisure-core/src 全部源码;输出一页「实施计划确认单」(任务分解/顺序/每步验证方式),等我确认后再写代码。
-阶段1 后端骨架:services/leisure-api 初始化(NestJS+Prisma+zod 配置+LeisureError 全局过滤器+幂等/审计拦截器+JWT);按 11 号文档 DDL 建立 prisma/schema 与 seed(种子对齐考察样例:皇家国际/6房型/技师级/江海龙组);实现 auth+artist+attendance 三模块(e2e 测试随写随留)。
-阶段2 场次与资金:session+stage-fee+approval 模块(上下钟两段式事务/规则快照计费/手动扣费审批阈值);资金流水表对应用户 REVOKE UPDATE/DELETE;日切汇总 job(BullMQ)。
-阶段3 Web 管理端:apps/app-leisure-web 脚手架(复制 app-web-full 骨架改造);按 05 文档 A1-A19 实现页面(优先:档案/等级组别/台费规则/充值/手动扣费/流水三查/报备明细汇总/上下钟);接 @yyc3/shell Sidebar+RequireRole。
+阶段1 后端骨架:services/leisure-api 初始化(NestJS+Prisma+zod 配置+LeisureError 全局过滤器+幂等/审计拦截器+JWT);按 11 号文档 DDL 建立 prisma/schema 与 seed(种子对齐考察样例:皇家国际/6房型/技师级/江海龙组/包厢房号样例);schema 相对 11 号补:room 包厢房号表 + 档案审核状态字段(需求全集 §3/§5);实现 auth+artist+attendance 三模块(e2e 测试随写随留)。
+阶段2 场次与资金:session+stage-fee+approval 模块(上下钟两段式事务/规则快照+进位阈值计费/上钟必选包厢房号与占用空闲流转/需求全集 §6.6 边界规则:转包厢分段·强制下钟同规·串台独立核算·台票抵扣优先/手动扣费审批阈值);资金流水表对应用户 REVOKE UPDATE/DELETE;日切汇总 job(BullMQ)。
+阶段3 Web 管理端:apps/app-leisure-web 脚手架(复制 app-web-full 骨架改造);按 05 文档 A1-A19 实现页面(优先:档案/等级组别/台费规则/充值/手动扣费/流水三查/报备明细汇总/上下钟;A1 筛选与 A2 表单含档案审核状态,依据需求全集 §3);接 @yyc3/shell Sidebar+RequireRole。
 阶段4 PWA:启用 manifest+usePWAManager+InstallPrompt;移动断点切 BottomNav;交付「报备现场屏」全屏二维码页。
 阶段5 Taro 艺人小程序:apps/app-mp-artist 初始化(Taro4 React+TS);注入 TaroTransport;实现 B1注册绑定/B2扫码签到签退/B4我的流水。
-阶段6 报表+联调:report 模块 7 张 MVP 报表+导出;端到端联调;补 08 文档 ★ 用例的自动化测试。
+阶段6 报表+联调:report 模块 7 张 MVP 报表+导出(其中 4 张含包厢房号/包厢类型维度,需求全集 §8.3);端到端联调;补 08 文档 ★ 用例的自动化测试。
 
 # 铁律(违反即返工)
 1. 领域逻辑(营业日/计费/前置校验/枚举)只 import @yyc3/leisure-core,禁止复制实现;后端计算也必须调用该包的纯函数
@@ -74,9 +83,10 @@ YYC3-LeisureManage 为**独立运营的多门店艺人管理系统**(2026-11-01 
 
 | 项 | 状态 |
 |---|---|
-| YYC3-LeisureManage 01–11 文档在位 | ✅ |
-| leisure-core 在 DeepStack-Matrix/packages(tsc 通过,vitest 待装依赖后跑) | ✅ |
-| DeepStack-Matrix 为 git 仓库(新工程建议独立分支/新仓,由 AI 在阶段0 提议) | 议 |
+| 文档在位:docs/YYC3-LeisureManage-项目规划/(00 需求全集 V3.0 + 01-11 + 导览 README) | ✅ |
+| 开源仓已建:github.com/YYC-Cube/YYC3-LeisureManage(main,CI 文档门禁绿,Pages lm.yyc3.vip 在线) | ✅ |
+| leisure-core 在 DeepStack-Matrix/packages(tsc 通过;进位阈值计费待阶段0 并入) | ✅ |
+| 代码工程落位 DeepStack-Matrix workspace(services/leisure-api、apps/app-leisure-web、apps/app-mp-artist);工作分支策略由 AI 在阶段0 提议 | 议 |
 | 第三方商业系统(需求考察参照)不受开发影响(红线已写入提示词) | ✅ |
 | 密钥未出现在任何文档(凭证只在 ~/.yyc3-keybackup) | ✅ |
 
@@ -84,8 +94,8 @@ YYC3-LeisureManage 为**独立运营的多门店艺人管理系统**(2026-11-01 
 
 | 阶段 | 门禁 |
 |---|---|
-| 1 | auth/artist/attendance e2e 绿;seed 后可查到"皇家国际+6房型+技师" |
-| 2 | 核心链路演示脚本全绿;流水表 REVOKE 生效;审批阈值触发正确 |
+| 1 | auth/artist/attendance e2e 绿;seed 后可查到"皇家国际+6房型+技师+包厢房号" |
+| 2 | 核心链路演示脚本全绿;流水表 REVOKE 生效;审批阈值(默认500)与进位阈值(默认15,改配置后生效)触发正确 |
 | 3 | 05 文档 A1–A19 页面可走查;@yyc3/ui 组件占比≥80%(自研件需说明) |
 | 4 | Lighthouse PWA ≥90;现场屏二维码可刷新 |
 | 5 | 小程序真机:注册绑定/扫码签到签退/我的流水三链路通 |
