@@ -7,7 +7,7 @@ created: "2026-11-01"
 updated: "2026-11-01"
 status: "active"
 license: "MIT"
-tags: [community],[contributing],[workflow]
+tags: [community, contributing, workflow]
 category: governance
 ---
 

@@ -8,7 +8,7 @@ created: "2026-11-01"
 updated: "2026-11-01"
 status: "active"
 license: "MIT"
-tags: [design],[visualization],[mermaid],[badge],[interaction]
+tags: [design, visualization, mermaid, badge, interaction]
 category: design
 language: zh-CN
 ---
@@ -103,7 +103,7 @@ flowchart LR
     A["上钟<br/>必选包厢房号"] --> B["带出包厢类型<br/>匹配 等级×房型 单价"]
     B --> C["包厢 → 占用"]
     C --> D["下钟<br/>记录结束时间"]
-    D --> E{"remain = 分钟 % 60<br/>remain > 15 ?"}
+    D --> E{"remain = 分钟 % 60<br/>remain > N ?<br/>(N=门店进位阈值,默认15)"}
     E -- "是(进位)" --> F["计费小时 = ⌊分钟/60⌋ + 1"]
     E -- "否" --> G["计费小时 = ⌊分钟/60⌋"]
     F --> H["金额 = 计费小时 × 单价"]
@@ -112,7 +112,7 @@ flowchart LR
     I --> J["包厢 → 空闲<br/>流水入上下钟明细报表"]
 ```
 
-> 规则快照铁律:计费单价取**上钟起表时点**的规则版本;当日已有该房型上钟时禁改规则(40903)。进位阈值 15 分钟门店可配(可切 30 分钟)。
+> 规则快照铁律:计费单价与**进位阈值 N** 均取**上钟起表时点**的快照;当日已有该房型上钟时禁改规则(40903)。进位阈值 N 为**门店级自定义参数**(默认 15 分钟,管理端可编辑为任意分钟)。
 
 ### 3.4 艺人实时状态机（色点看板）
 

@@ -33,7 +33,7 @@ YYC3-LeisureManage 为**独立运营的多门店艺人管理系统**(2026-11-01 
 - 后端与小程序工程放置:后端放 DeepStack-Matrix/services/leisure-api(挂入同一 pnpm workspace,在 pnpm-workspace.yaml 的 packages 段追加 "services/*");小程序放 apps/app-mp-artist;Web 管理端放 apps/app-leisure-web
 
 # 本次任务:全栈开发落地(按顺序执行,每阶段结束停下汇报)
-阶段0 阅读:先读 docs/YYC3-LeisureManage-项目规划/ 的 README(导览)与 02/10/11 号文档及 YYC3-LeisureManage.md(需求全集,注意第六章「小时计费+超时15分钟进位」须并入 leisure-core 计费引擎),再浏览 leisure-core/src 全部源码;输出一页「实施计划确认单」(任务分解/顺序/每步验证方式),等我确认后再写代码。
+阶段0 阅读:先读 docs/YYC3-LeisureManage-项目规划/ 的 README(导览)与 02/10/11 号文档及 YYC3-LeisureManage.md(需求全集,注意第六章「小时计费+进位阈值」须并入 leisure-core 计费引擎——阈值 N 门店级可自定义编辑,默认15分钟,须参数化实现),再浏览 leisure-core/src 全部源码;输出一页「实施计划确认单」(任务分解/顺序/每步验证方式),等我确认后再写代码。
 阶段1 后端骨架:services/leisure-api 初始化(NestJS+Prisma+zod 配置+LeisureError 全局过滤器+幂等/审计拦截器+JWT);按 11 号文档 DDL 建立 prisma/schema 与 seed(种子对齐考察样例:皇家国际/6房型/技师级/江海龙组);实现 auth+artist+attendance 三模块(e2e 测试随写随留)。
 阶段2 场次与资金:session+stage-fee+approval 模块(上下钟两段式事务/规则快照计费/手动扣费审批阈值);资金流水表对应用户 REVOKE UPDATE/DELETE;日切汇总 job(BullMQ)。
 阶段3 Web 管理端:apps/app-leisure-web 脚手架(复制 app-web-full 骨架改造);按 05 文档 A1-A19 实现页面(优先:档案/等级组别/台费规则/充值/手动扣费/流水三查/报备明细汇总/上下钟);接 @yyc3/shell Sidebar+RequireRole。

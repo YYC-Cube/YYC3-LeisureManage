@@ -7,7 +7,7 @@ created: "2026-11-01"
 updated: "2026-11-01"
 status: "active"
 license: "MIT"
-tags: [community],[code-of-conduct],[governance]
+tags: [community, code-of-conduct, governance]
 category: governance
 ---
 
