@@ -1,6 +1,6 @@
 # YYC3-LeisureManage · 项目交付总览(SUMMARY)
 
-> 更新:2026-11-01|状态:**MVP 全量 + 方案甲闭环 + P0 回补 + 台票/展示/预约/计费配置 II 期落地,全量测试绿**
+> 更新:2026-11-01|状态:**MVP 全量 + 方案甲闭环 + P0 回补 + II 期(台票/展示/预约/计费配置/结算单预览/语音盒子联动层/14 天门禁)落地,全量测试绿;双轨试点进入运行期**
 > 本文档回答三个问题:交付了什么 · 代码在哪里 · 怎么跑起来
 
 ---
@@ -18,22 +18,22 @@
 
 ## 二、交付了什么(全部已落地并验证)
 
-### 2.1 领域单源包 `@yyc3/leisure-core`(8 源文件)
-四端一致性锚点:营业日(08:00 日切)· 台费引擎(等级×房型规则快照 + 进位阈值 + **最低消费/封顶钳位**)· 时段定价槽位解析 · 上钟前置校验 · 台票校验(余额/有效期/购买金额)· 全部枚举(报备 8 型/流水 4 型/收费通道 5+1/实时 5 色点)· 传输层注入式 API Client(含 tickets/showcase/bookings/storeConfig 四组)
-**验证:tsc 严格模式干净 + vitest 36/36**
+### 2.1 领域单源包 `@yyc3/leisure-core`(9 源文件)
+四端一致性锚点:营业日(08:00 日切)· 台费引擎(等级×房型规则快照 + 进位阈值 + **最低消费/封顶钳位**)· 时段定价槽位解析 · 上钟前置校验 · 台票校验(余额/有效期/购买金额)· **语音盒子传输(HttpVoiceBoxTransport,私网白名单)** · 全部枚举(报备 8 型/流水 4 型/收费通道 5+1/实时 5 色点)· 传输层注入式 API Client(含 tickets/showcase/bookings/storeConfig/recon/voiceBox/billPreview)
+**验证:tsc 严格模式干净 + vitest 43/43**
 
 ### 2.2 后端 `services/leisure-api`(25 源文件 · 14 业务模块)
 NestJS + Prisma + MySQL/Redis:auth(JWT+微信绑定+跨店工单)· artist(档案 94 字段/软删/批量)· attendance(报备 8 枚举/汇总矩阵/补打卡)· **session(上下钟/串台/方案甲计费入房账/离线兜底)** · **stage-fee(规则/时段定价槽位/充值(五通道)/手动扣费审批/流水/冲正)** · **room(方案甲核心:房账开/关房/关房统一结算 ROOM_SETTLE/清扫/艺人自点单/商品目录/叫钟)** · **ticket(规则 CRUD/购买/核销/双记录/余额)** · **showcase(投放/列表/结束/批量结束)** · **booking(创建/流转/终态锁定)** · store-config(艺人设置 8 项+计费配置后台可编辑)· approval · store · taxonomy · report(7 张 MVP+双轨对账)· 日切 job
 **验证:tsc 干净 · prisma generate ✓ · e2e 31/31(含★用例/方案甲/P0 三线/台票/展示/预约/最低消费钳位)**
 
 ### 2.3 Web 管理端 `apps/app-leisure-web`(23 页面文件,React19+Vite8+@yyc3/ui)
-A1–A20 + P0 落地:档案/等级组别/台费规则/**时段定价**/充值(通道下拉)/手动扣费/流水三查/报备明细汇总/上下钟/**房态看板(方案甲开关房+结算单)**/**钟房大屏(语音叫钟)**/**双轨对账**/**台票四 Tab**/**展示控制台**/**预约管理**/**门店参数(含计费配置:最低消费/封顶/收费通道清单编辑)**
+A1–A20 + P0 落地:档案/等级组别/台费规则/**时段定价**/充值(通道下拉)/手动扣费/流水三查/报备明细汇总/上下钟/**房态看板(方案甲开关房+结算单明细预览:时间费逐场次实时报价+点单+余额,MIXED 现金+抵扣)**/**钟房大屏(语音叫钟)**/**双轨对账(14 天门禁面板)**/**台票四 Tab**/**展示控制台**/**预约管理**/**门店参数(含计费配置:最低消费/封顶/收费通道清单编辑)**
 
 ### 2.4 PWA 移动端(同工程移动形态)
 BottomNav 断点布局 + manifest/InstallPrompt + **A15 报备现场屏**(全屏二维码)
 
-### 2.5 艺人小程序 `apps/app-mp-artist`(Taro4+React,7 源文件)
-B1 资料自助绑定 · B2 扫码签到/签退 · B4 我的流水;scene HMAC 防伪
+### 2.5 艺人小程序 `apps/app-mp-artist`(Taro4+React,9 源文件)
+B1 资料自助绑定 · B2 扫码签到/签退 · B4 我的流水 · **B7 我的台票(余额含有效期+购买/使用流水)**;scene HMAC 防伪
 
 ### 2.6 方案甲资金闭环(2026-11-01 裁决并落地)
 **时间费即台费:下钟计入房账(不落流水)→ 关房统一结算(现金/台费抵扣/混合)→ ROOM_SETTLE 流水(逐艺人,只增)**;废止原「下钟即扣 SESSION_DEDUCT」。
@@ -54,9 +54,9 @@ pnpm db:seed
 pnpm dev            # :3001/api/v1(Swagger: /docs)
 
 # 测试
-pnpm --filter @yyc3/leisure-core test          # 36/36
+pnpm --filter @yyc3/leisure-core test          # 43/43
 LEISURE_E2E_PHONE=13103790379 LEISURE_E2E_PASSWORD='ChangeMe@2026' \
-LEISURE_E2E_FINANCE_PHONE=13103790380 pnpm exec vitest run --no-file-parallelism   # 31/31
+LEISURE_E2E_FINANCE_PHONE=13103790380 pnpm exec vitest run --no-file-parallelism   # 34/34
 ```
 登录:13103790379 / ChangeMe@2026(**首登必改**);财务审批人:13103790380。
 
@@ -66,13 +66,15 @@ LEISURE_E2E_FINANCE_PHONE=13103790380 pnpm exec vitest run --no-file-parallelism
 
 | 层 | 项 | 结果 |
 |---|---|---|
-| 领域包 | tsc / vitest | ✅ / ✅ 36/36 |
-| 后端 | tsc / prisma generate / e2e | ✅ / ✅ / ✅ 31/31 |
+| 领域包 | tsc / vitest | ✅ / ✅ 43/43 |
+| 后端 | tsc / prisma generate / e2e | ✅ / ✅ / ✅ 34/34 |
 | 方案甲 | 下钟不落流水基线 · ROOM_SETTLE 逐艺人 · 余额扣减一致 · 重复关房拒绝 · 超限 40910 | ✅ 全部有断言 |
-| 闭环链 | 充值(五通道)→开房(进房即上钟)→自点单→关房 FEE_DEDUCT→ROOM_SETTLE→清扫→空闲 | ✅ e2e 全链 |
+| 闭环链 | 充值(五通道)→开房(进房即上钟)→自点单→**结算单预览(与真结算同额)**→关房 FEE_DEDUCT→ROOM_SETTLE→清扫→空闲 | ✅ e2e 全链 |
 | P0 三线 | 钟房大屏语音叫钟 · 时段定价槽位覆盖 · 离线兜底幂等重放 · 双轨对账 MATCHED | ✅ e2e |
 | II 期计费 | 最低消费兜底 / 封顶压值 / 后台可编辑(预设 0)· 收费通道 现金/转账/自定义1-3 清单校验 | ✅ e2e(40911 余额/通道清单拒) |
 | 台票/展示/预约 | 台票购买核销双记录 · 展示投放去重 · 预约流转终态锁定 40913 | ✅ e2e |
+| 语音盒子联动 | 传输层私网白名单/超时不抛(单测 7)· 未配置 skipped 不阻断(e2e) | ✅;真机联调待盒子接口 |
+| 14 天门禁 | 日切自动快照 PENDING_LEGACY · history 14 格/streak/gatePassed(e2e) | ✅ 试点运行期 |
 
 ---
 
@@ -98,7 +100,7 @@ code/mp-artist     → ../../YYC3-DeepStack-Matrix/apps/app-mp-artist
 
 ## 七、下一步(优先级)
 
-1. 房账关房结算单 UI 对接真后端明细(board.tsx 当前直调 close;关房前明细预览待接)
-2. 硬件语音盒子联动层(钟房大屏 Web Speech 已落地,盒子协议对接 II 期)
-3. 双轨对账试点(与实测系统并行 14 天零差异后切换;手册见 docs)
-4. 艺人小程序 B 端台票/流水页接入新端点(tickets/my)
+1. 语音盒子真机联调(确认店内盒子型号/HTTP 接口 → 配 `VOICE_BOX_URL` 模板 → `POST /voice-box/test` 验证)
+2. 双轨对账 14 天试点运行(日切已自动快照;每日仅录对侧 4 数,门禁面板盯 streak)
+3. 小程序台票页真机回归(Taro build:h5/微信工具);服务评价/CRM 等 III 期
+4. 双轨达标后切换演练(对侧只读、本系统唯一记账源)
