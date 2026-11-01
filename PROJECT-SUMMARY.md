@@ -22,10 +22,10 @@
 四端一致性锚点:营业日(08:00 日切)· 台费引擎(等级×房型规则快照 + 进位阈值 + **最低消费/封顶钳位**)· 时段定价槽位解析 · 上钟前置校验 · 台票校验(余额/有效期/购买金额)· **语音盒子传输(HttpVoiceBoxTransport,私网白名单)** · 全部枚举(报备 8 型/流水 4 型/收费通道 5+1/实时 5 色点)· 传输层注入式 API Client(含 tickets/showcase/bookings/storeConfig/recon/voiceBox/billPreview)
 **验证:tsc 严格模式干净 + vitest 43/43**
 
-### 2.2 后端 `services/leisure-api`(27 源文件 · 15 业务模块)
-NestJS + Prisma + MySQL/Redis:auth(JWT+微信绑定+跨店工单)· artist(档案 94 字段/软删/批量)· attendance(报备 8 枚举/汇总矩阵/补打卡)· **session(上下钟/串台/方案甲计费入房账/离线兜底/quoteIn 只读报价)** · **stage-fee(规则/时段定价槽位/充值(五通道)/手动扣费审批/流水/冲正)** · **room(方案甲核心:房账开/关房/结算单预览/关房统一结算 ROOM_SETTLE/清扫/艺人自点单/商品目录/叫钟+语音盒子分发)** · **ticket(规则 CRUD/购买/核销/双记录/余额)** · **showcase(投放/列表/结束/批量结束)** · **booking(创建/流转/终态锁定)** · **review(III 期:评价录入/区间列表/均分分布/艺人端 my)** · store-config(艺人设置 8 项+计费配置后台可编辑)· approval · store · taxonomy · report(7 张 MVP+双轨对账+14 天门禁)· 日切 job(汇总+对账自动快照)
-**验证:tsc 干净 · prisma generate ✓ · e2e 35/35(含★用例/方案甲/P0 三线/台票/展示/预约/评价/最低消费钳位/结算单预览/盒子双态/门禁视图)**
-**dev 联调件:`scripts/mock-voice-box.mjs`(本机回环 mock 盒子,`.env` 指向即可走通 CALLED→分发→审计全链)**
+### 2.2 后端 `services/leisure-api`(28 源文件 · 16 业务模块)
+NestJS + Prisma + **PostgreSQL 15**/Redis:auth(JWT+用户名/手机号登录+**首登强制改密**+微信绑定+跨店工单)· artist(档案 94 字段/软删/批量/**必填项按门店配置校验**)· attendance(报备 8 枚举/汇总矩阵/补打卡/**开放时段+主管审核流**/实时 5 色)· **session(上下钟/串台/方案甲计费入房账/离线兜底/quoteIn 只读报价/艺人自助下钟)** · **stage-fee(规则/时段定价槽位/充值(五通道)/手动扣费审批/流水/冲正)** · **room(方案甲核心:房账开/关房/结算单预览/关房统一结算 ROOM_SETTLE/清扫/艺人自点单/商品目录/叫钟+语音盒子分发)** · **dispatch(轮台派单引擎:队列/推荐/模式校验/日志)** · **ticket(规则 CRUD/购买/核销/双记录/余额含过期归零)** · **showcase(投放[仅审核通过]/列表/结束)** · **booking(创建/流转/终态锁定)** · **review(评价录入/区间列表/均分分布/艺人端 my)** · store-config(艺人设置 8 项 9/9 真消费)· approval · store · taxonomy · report(8 张+双轨对账+14 天门禁)· 日切 job(汇总+对账自动快照)
+**验证:tsc 干净 · prisma generate ✓ · e2e 42/42(9 套件,PG15 真库;含★用例/方案甲/P0 三线/台票/展示/预约/评价/钳位/预览/盒子/门禁/改密/设置消费面/轮台)**
+**dev 联调件:`scripts/mock-voice-box.mjs`(本机回环 mock 盒子)· `scripts/apply-pg-grants.sql`(运行账号只增表收权)**
 
 ### 2.3 Web 管理端 `apps/app-leisure-web`(24 页面文件,React19+Vite8+@yyc3/ui)
 A1–A20 + P0 + III 期起步:档案/等级组别/台费规则/**时段定价**/充值(通道下拉)/手动扣费/流水三查/报备明细汇总/上下钟/**房态看板(方案甲开关房+结算单明细预览:时间费逐场次实时报价+点单+余额,MIXED 现金+抵扣)**/**钟房大屏(语音叫钟)**/**双轨对账(14 天门禁面板)**/**台票四 Tab**/**展示控制台**/**预约管理**/**服务评价(统计+筛选+代录)**/**门店参数(含计费配置:最低消费/封顶/收费通道清单编辑)**
@@ -48,19 +48,22 @@ B1 资料自助绑定 · B2 扫码签到/签退 · B4 我的流水 · **B7 我�
 M=/Users/yanyu/YYC-Cube/personal/YYC3-DeepStack-Matrix
 cd $M && pnpm install
 
-# 后端(MySQL/Redis 起在 3307,见 services/leisure-api/docker-compose.dev.yml)
+# 后端(PostgreSQL 15/Redis:dev 容器映射 5434/6380;本机 5433 为生产主库勿连——2026-11-02 由 MySQL 切换)
 cd services/leisure-api
-docker compose -f docker-compose.dev.yml up -d
-DATABASE_URL="mysql://root:root-dev-only@127.0.0.1:3307/leisure" pnpm exec prisma migrate deploy
-pnpm db:seed
+docker compose -f docker-compose.dev.yml up -d postgres redis
+DATABASE_URL="postgresql://leisure:leisure-dev-only@127.0.0.1:5434/leisure?schema=public" pnpm exec prisma migrate deploy
+docker exec -i leisure-postgres psql -U leisure -d leisure < scripts/apply-pg-grants.sql   # 运行账号只增表收权
+pnpm db:seed        # dev 含测试账号;NODE_ENV=prod 自动跳过
 pnpm dev            # :3001/api/v1(Swagger: /docs)
 
-# 测试
+# 测试(e2e 用测试账号;改密套件口令全部走环境变量)
 pnpm --filter @yyc3/leisure-core test          # 43/43
-LEISURE_E2E_PHONE=13103790379 LEISURE_E2E_PASSWORD='ChangeMe@2026' \
-LEISURE_E2E_FINANCE_PHONE=13103790380 pnpm exec vitest run --no-file-parallelism   # 35/35
+LEISURE_E2E_PHONE=admin LEISURE_E2E_PASSWORD=123456 LEISURE_E2E_FINANCE_PHONE=china \
+LEISURE_E2E_PWD_ACCOUNT=e2epwd LEISURE_E2E_PWD_DEFAULT='ChangeMe@2026' \
+LEISURE_E2E_PWD_ROTATE_A='<强密码A>' LEISURE_E2E_PWD_ROTATE_B='<强密码B>' pnpm test   # 42/42(文件串行)
 ```
-登录(账号=用户名或手机号):**测试账号 `admin / 123456`、`china / 123456`**(管理员角色,dev seed 每次重置,生产 seed 不得携带);正式账号 13103790379 / ChangeMe@2026(**首登必改**);财务审批人:13103790380。
+登录(账号=用户名或手机号):**测试账号 `admin / 123456`、`china / 123456`**(管理员角色,dev seed 每次重置,生产 seed 自动跳过);正式账号 13103790379 / ChangeMe@2026(**首登强制改密:改密前业务接口 40302**);财务审批人:13103790380。
+**生产部署**:`services/leisure-api/deploy/nas/`(Dockerfile.prod / docker-compose.prod.yml / .env.production.example / README-NAS部署手册)。
 
 ---
 
@@ -69,7 +72,9 @@ LEISURE_E2E_FINANCE_PHONE=13103790380 pnpm exec vitest run --no-file-parallelism
 | 层 | 项 | 结果 |
 |---|---|---|
 | 领域包 | tsc / vitest | ✅ / ✅ 43/43 |
-| 后端 | tsc / prisma generate / e2e | ✅ / ✅ / ✅ 35/35 |
+| 后端 | tsc / prisma generate / e2e | ✅ / ✅ / ✅ 42/42(PostgreSQL 15) |
+| 安全基线 | 首登强制改密(40302)· prod 启动硬化(拒开发默认密钥/强制 CORS 白名单/Swagger 关)· PG 运行账号只增表收权 | ✅ e2e + 启动校验实测 |
+| 门店设置 | 8 项 9/9 真消费:必填项校验 · 报备时段/审核流 · 艺人自助下钟 · 轮台派单引擎(40914)+ 主管轮台报表 | ✅ e2e |
 | 方案甲 | 下钟不落流水基线 · ROOM_SETTLE 逐艺人 · 余额扣减一致 · 重复关房拒绝 · 超限 40910 | ✅ 全部有断言 |
 | 闭环链 | 充值(五通道)→开房(进房即上钟)→自点单→**结算单预览(与真结算同额)**→关房 FEE_DEDUCT→ROOM_SETTLE→清扫→空闲 | ✅ e2e 全链 |
 | P0 三线 | 钟房大屏语音叫钟 · 时段定价槽位覆盖 · 离线兜底幂等重放 · 双轨对账 MATCHED | ✅ e2e |
@@ -102,7 +107,7 @@ code/mp-artist     → ../../YYC3-DeepStack-Matrix/apps/app-mp-artist
 
 ## 七、下一步(优先级)
 
-1. 语音盒子**真机**联调:软件链路已用 mock 盒子验证(CALLED→分发→审计 ok);只需确认店内盒子型号/HTTP 接口 → 改 `.env` `VOICE_BOX_URL` 模板 → `POST /voice-box/test`
-2. 双轨对账 14 天试点运行(日切已自动快照;每日仅录对侧 4 数,门禁面板盯 streak;达标后切换演练)
-3. 小程序微信开发者工具真机回归(H5 构建已通;`pnpm build:weapp` 走同一垫片)
-4. III 期续:艺人订单(a21,对接收银订单源)· CRM/预约锁钟(到店自动叫钟)· 交接班 · 提成引擎 · 推送矩阵
+1. **上线现场动作**(软件侧 P0 已清):`.env.production` 填真值密钥(入 ~/.yyc3-keybackup)→ 主库 `migrate deploy` + `NODE_ENV=prod seed` + grants → NAS 首次构建(`deploy/nas` 手册 §4)→ 冒烟清单 → 网关反代 + CORS 正式域名;艺人端 H5 `API_BASE` 改网关域名重构建
+2. 语音盒子**真机**接线:改 `VOICE_BOX_URL` → `POST /voice-box/test`
+3. 双轨对账 14 天试点运行(每日录对侧 4 数;达标后切换演练)
+4. P1 续:台票抵扣并入结算 · 台票两张报表进报表中心 + xlsx · 艺人订单视图 · 评价关联房账 · 预约到店联动叫钟/锁钟;III 期:CRM · 交接班 · 提成引擎 · 推送矩阵
