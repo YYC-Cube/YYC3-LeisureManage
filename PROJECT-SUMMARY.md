@@ -60,7 +60,7 @@ pnpm --filter @yyc3/leisure-core test          # 43/43
 LEISURE_E2E_PHONE=13103790379 LEISURE_E2E_PASSWORD='ChangeMe@2026' \
 LEISURE_E2E_FINANCE_PHONE=13103790380 pnpm exec vitest run --no-file-parallelism   # 35/35
 ```
-登录:13103790379 / ChangeMe@2026(**首登必改**);财务审批人:13103790380。
+登录(账号=用户名或手机号):**测试账号 `admin / 123456`、`china / 123456`**(管理员角色,dev seed 每次重置,生产 seed 不得携带);正式账号 13103790379 / ChangeMe@2026(**首登必改**);财务审批人:13103790380。
 
 ---
 
