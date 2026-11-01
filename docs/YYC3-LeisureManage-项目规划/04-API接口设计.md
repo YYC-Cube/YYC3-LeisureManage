@@ -53,12 +53,13 @@
 |---|---|---|
 | GET/POST/PUT/DELETE | /stage-fee-rules[/{id}] | 规则:levelId+roomTypeIds[]+amount;当日已有该房型上钟时禁改(409) |
 | POST | /sessions/start | 上钟起表:{artistId,roomId};前置校验:档案限制(总次数/串台数/未签到可上钟配置);写实时状态 |
-| POST | /sessions/{id}/finish | 下钟:计算 fee=规则(快照)→生成 SESSION_DEDUCT 流水;若台票抵扣:核销 ticket |
+| POST | /sessions/{id}/finish | 下钟:计算 fee=规则(快照)→**计入房账**(方案甲:不落流水);台票抵扣移至关房结算 |
 | POST | /sessions/{id}/cross | 串台登记(校验 maxCrossRooms) |
 | GET | /sessions | 检索:Tab 参维 `by=artist|room|group` + 状态 `status=all|onstage|cross` + 营业日 |
+| POST | /room-sessions/{id}/close | **房账关房结算(方案甲)**:Σ时间费+Σ自点单→现金/台费抵扣(ROOM_SETTLE 流水)/混合;详见《12-包厢房态模块》 |
 | POST | /stage-fee/recharge | 充值:{artistId,amount,payChannel=CASH|DOUYIN};现金即落流水;抖音走预下单→回调落流水 |
 | POST | /stage-fee/manual-deduct | 手动扣费:{artistId,amount,remark!};≥阈值生成 approval,PENDING 时不落流水 |
-| GET | /stage-fee/txns | 流水:type 可空(全)/RECHARGE/SESSION_DEDUCT/MANUAL_DEDUCT;营业日区间+组别+腰牌号/艺名;返回含 totalAmount 汇总 |
+| GET | /stage-fee/txns | 流水:type 可空(全)/RECHARGE/ROOM_SETTLE/MANUAL_DEDUCT;营业日区间+组别+腰牌号/艺名;返回含 totalAmount 汇总 |
 | GET | /stage-fee/balance/{artistId} | 台费余额(流水聚合,Redis 缓存) |
 
 ## 5. 台票 ticket
