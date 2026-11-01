@@ -147,6 +147,11 @@ bash scripts/verify-docs.sh                       # 本地文档门禁(对齐 CI
 | 5 艺人小程序 | B1 注册绑定 / B2 扫码签到签退 / B4 我的流水 | 真机三链路通 |
 | 6 报表+联调 | 7 张 MVP 报表 + ★ 用例自动化 | 覆盖 ≥90% |
 
+> **状态(2026-11-01):✅ 六阶段全部完成并验证**——e2e **24/24** · leisure-core 单测 **25/25** · 方案甲资金闭环落地(时间费计入房账,关房统一结算 `ROOM_SETTLE`,废止下钟即扣)。
+
+**交付总览**:[PROJECT-SUMMARY.md](PROJECT-SUMMARY.md)(交付清单/验证状态/运行命令/下一步)。
+**代码导航**:本仓库 `code/` 目录为**机器本地软链**(→ 姊妹仓 `../YYC3-DeepStack-Matrix` 对应工程:leisure-core / leisure-api / web / mp-artist),真源以 DeepStack-Matrix 提交为准;克隆到无姊妹仓的环境时软链悬空属预期。
+
 ## 五、文档体系索引
 
 | 文档 | 内容 |
