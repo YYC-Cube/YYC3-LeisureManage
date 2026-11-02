@@ -30,8 +30,9 @@ NestJS + Prisma + **PostgreSQL 15**/Redis:auth(JWT+用户名/手机号登录+**�
 ### 2.3 Web 管理端 `apps/app-leisure-web`(24 页面文件,React19+Vite8+@yyc3/ui)
 A1–A20 + P0 + III 期起步 + **设计体系对齐(2026-11-02 四会话并行批)**:档案/等级组别/台费规则/**时段定价**/充值(通道下拉)/手动扣费/流水三查/报备明细汇总(含审核按钮)/上下钟/**房态看板(结算单明细预览+轮台推荐位)**/**钟房大屏(语音叫钟)**/**双轨对账(14 天门禁面板)**/**台票四 Tab(?tab= 深链)**/**展示控制台**/**预约管理**/**服务评价**/**主题定制(预设色调/语义变量/实时预览)**/**⌘K 命令面板**/门店参数(计费配置+通道清单);**token 化:20 个 --lm-* 变量单源,23 页面 216 处硬编码色收敛**
 
-### 2.4 PWA 移动端(同工程移动形态)
+### 2.4 PWA 移动端(同工程移动形态,**离线能力完整**)
 BottomNav 断点布局 + manifest/InstallPrompt + **A15 报备现场屏**(全屏二维码)
+**Service Worker(public/sw.js,零依赖)**:导航网络优先→缓存壳 · /assets/* 缓存优先(hash 不可变) · /api/v1 GET 网络优先+离线回缓存+503 信封 · 写操作直连;SW no-cache 头(边缘 nginx 定向 location);更新流=controllerchange 自动重载+toast;离线横幅(useOnlineStatus)
 
 ### 2.5 艺人小程序 `apps/app-mp-artist`(Taro4+React,9 源文件)
 B1 资料自助绑定 · B2 扫码签到/签退 · B4 我的流水 · **B7 我的台票(余额含有效期+购买/使用流水)**;scene HMAC 防伪
