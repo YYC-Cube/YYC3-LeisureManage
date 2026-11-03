@@ -1,23 +1,22 @@
 ---
-file: "YYC3-团队通用-开发文档.md"
-title: "YYC3-团队通用-开发文档"
-description: "YYC³ AI协同开发通用工作规范 — 五维驱动五高五标五化核心思维落地实施指南"
-author: "YanYuCloudCube Team <admin@0379.email>"
-version: "v2.0.0"
-created: "2026-05-03"
-updated: "2026-05-30"
-status: "stable"
-license: "MIT"
-tags: [ai-collaboration],[development-standard],[workflow],[documentation]
+file: YYC3-团队通用-开发文档.md
+title: YYC³ 团队通用 AI 协同开发文档 — 上下文存档 · 规划衔接 · 总结同步
+description: YYC³ AI 协同开发工作规范 — 五维驱动落地五高五标五化的标准入职、存档与衔接流程
+author: YYC³ Team <admin@0379.email>
+version: v2.1.0
+created: 2026-11-01
+updated: 2026-11-01
+status: stable
+tags: [ai-collaboration, workflow, documentation, handoff]
 category: policy
 language: zh-CN
 audience: developers,ai-tutors,stakeholders
 complexity: intermediate
 ---
 
-<div align="center">
+# YYC³ 团队通用 AI 协同开发文档 — 上下文存档 · 规划衔接 · 总结同步
 
-> **_YanYuCloudCube_**
+> **_YYC³_**（YanYuCloudCube™ · 注册商标）
 > _言启象限 | 语枢未来_
 > **_Words Initiate Quadrants, Language Serves as Core for Future_**
 > _万象归元于云枢 | 深栈智启新纪元_
@@ -25,9 +24,14 @@ complexity: intermediate
 
 ---
 
-</div>
+## 核心理念
 
-# YYC³ 团队通用 - AI协同开发文档
+**五高架构**：高可用 | 高性能 | 高安全 | 高扩展 | 高智能
+**五标体系**：标准化 | 规范化 | 自动化 | 可视化 | 智能化
+**五化转型**：流程化 | 数字化 | 生态化 | 工具化 | 服务化
+**五维评估**：时间维 | 空间维 | 属性维 | 事件维 | 关联维
+
+---
 
 ## 文档定位
 
@@ -69,7 +73,7 @@ complexity: intermediate
 │  Phase 3: 工作空间初始化 (必做)                              │
 │  └─ 在 docs/ 创建本次会话工作目录                            │
 │      格式: {项目名}-{导师标识}-{YYYYMMDD}                     │
-│      示例: 0379-world-glm5-turbo-20260503                   │
+│      示例: 0379-world-glm5-turbo-20261101                   │
 │                                                              │
 │  Phase 4: 输出审核分析文档 (必做)                            │
 │  └─ 生成《项目现状审核报告.md》                               │
@@ -81,7 +85,7 @@ complexity: intermediate
 ### 1.2 绝对禁止行为（红线）
 
 | 行为                    | 原因                       | 后果             |
-| ----------------------- | -------------------------- | ---------------- |
+| ---- | ---- | ---- |
 | ❌ 不读代码直接给方案   | 脱离实际，方案不可落地     | 视为无效输出     |
 | ❌ 盲猜配置项值         | 可能引入安全风险或功能异常 | 必须标注"待确认" |
 | ❌ 盲测未验证的命令     | 可能破坏生产环境           | 先在测试环境验证 |
@@ -91,7 +95,7 @@ complexity: intermediate
 ### 1.3 推荐行为（加分项）
 
 | 行为                        | 说明                     |
-| --------------------------- | ------------------------ |
+| ---- | ---- |
 | ✅ 对每个配置项都认真对待   | 配置是系统的DNA          |
 | ✅ 准确理解整个系统架构     | 架构决定上限             |
 | ✅ 提供专业建议而非随意操作 | 专业性体现价值           |
@@ -117,8 +121,8 @@ docs/
 │       └── test-results.json
 │
 ├── archive/                             ← 历史会话归档
-│   ├── 0379-world-claude-20260420/
-│   └── 0379-world-gpt4-20260425/
+│   ├── 0379-world-claude-20261101/
+│   └── 0379-world-gpt4-20261101/
 │
 └── templates/                           ← 文档模板（可选）
     ├── audit-report-template.md
@@ -128,7 +132,7 @@ docs/
 ### 2.2 文档命名规范
 
 | 文档类型 | 命名格式                   | 示例                 |
-| -------- | -------------------------- | -------------------- |
+| ---- | ---- | ---- |
 | 审核报告 | `00-项目现状审核报告.md`   | -                    |
 | 任务规划 | `01-任务规划与节点目标.md` | -                    |
 | 执行日志 | `02-执行日志与进度跟踪.md` | -                    |
@@ -142,14 +146,16 @@ docs/
 ```markdown
 ---
 file: 00-项目现状审核报告.md
+title: {项目名} 项目现状审核报告
 description: {项目名} 现状审核 - {导师} - {日期}
 author: AI Tutor <{模型标识}>
-version: v2.0.0
-created: {YYYY-MM-DD}
-updated: 2026-05-30
+version: {VERSION}
+created: {CREATE_DATE}
+updated: {UPDATE_DATE}
 status: active
-tags: [audit],[analysis],[baseline]
+tags: [audit, analysis, baseline]
 category: report
+language: zh-CN
 ---
 
 # 📊 项目现状审核报告
@@ -157,7 +163,7 @@ category: report
 ## 基本信息
 
 | 属性         | 值                      |
-| ------------ | ----------------------- |
+| ---- | ---- |
 | **项目名称** | {项目名}                |
 | **审核日期** | {YYYY-MM-DD HH:MM}      |
 | **AI导师**   | {模型/版本}             |
@@ -206,7 +212,7 @@ category: report
 ### 3.2 待确认配置项 ⚠️
 
 | 配置项 | 发现位置 | 建议值 | 风险说明 |
-| ------ | -------- | ------ | -------- |
+| ---- | ---- | ---- | ---- |
 
 ## 四、安全评估
 
@@ -250,14 +256,16 @@ category: report
 ```markdown
 ---
 file: 01-任务规划与节点目标.md
+title: {项目名} 任务规划与节点目标
 description: {项目名} 开发规划 - {导师} - {日期}
 author: AI Tutor <{模型标识}>
-version: v2.0.0
-created: {YYYY-MM-DD}
-updated: 2026-05-30
+version: {VERSION}
+created: {CREATE_DATE}
+updated: {UPDATE_DATE}
 status: active
-tags: [planning],[milestones],[roadmap]
+tags: [planning, milestones, roadmap]
 category: plan
+language: zh-CN
 ---
 
 # 📋 任务规划与节点目标
@@ -283,13 +291,16 @@ category: plan
 ### Task 1.{N}: {任务标题}
 
 **目标**: {SMART目标描述}
-**验收标准**:
 
+**验收标准**:
 - [ ] 标准 1
 - [ ] 标准 2
-      **依赖关系**: {前置任务}
-      **风险点**: {潜在风险及应对}
-      **完成标记**: ⬜ 未开始 / 🔄 进行中 / ✅ 已完成 / ❌ 阻塞
+
+**依赖关系**: {前置任务}
+
+**风险点**: {潜在风险及应对}
+
+**完成标记**: ⬜ 未开始 / 🔄 进行中 / ✅ 已完成 / ❌ 阻塞
 
 ## 四、里程碑节点
 
@@ -436,14 +447,16 @@ category: plan
 ````markdown
 ---
 file: 03-总结文档与状态同步.md
+title: {项目名} 会话总结与状态同步
 description: {项目名} 会话总结 - {导师} - {日期}
 author: AI Tutor <{模型标识}>
-version: v2.0.0
-created: {YYYY-MM-DD}
-updated: 2026-05-30
+version: {VERSION}
+created: {CREATE_DATE}
+updated: {UPDATE_DATE}
 status: stable
-tags: [summary],[handoff],[sync]
+tags: [summary, handoff, sync]
 category: report
+language: zh-CN
 ---
 
 # 📝 会话总结与状态同步
@@ -451,7 +464,7 @@ category: report
 ## 会话信息
 
 | 属性         | 值           |
-| ------------ | ------------ |
+| ---- | ---- |
 | **会话时长** | {时长}       |
 | **AI导师**   | {模型/版本}  |
 | **主要工作** | {一句话概括} |
@@ -510,9 +523,8 @@ cat docs/{本次会话目录}/03-总结文档与状态同步.md
 grep -A 5 "进行中任务" docs/{本次会话目录}/03-*.md
 
 # 4. 启动服务（如需要）
-docker-compose up -d
+docker compose up -d
 ```
-````
 
 ### 当前优先级 TOP 3
 
@@ -543,8 +555,7 @@ docker-compose up -d
 
 **会话状态**: ✅ 正常结束 / ⚠️ 提前终止 / 🔒 强制中断
 **下次建议时间**: {建议的时间窗口}
-
-```
+````
 
 ---
 
@@ -604,7 +615,7 @@ Step 7: 向用户确认："我已了解上次进度，从 XXX 继续？"
 每次代码变更必须通过以下检查：
 
 | 检查项   | 命令/工具                               | 通过标准                  |
-| -------- | --------------------------------------- | ------------------------- |
+| ---- | ---- | ---- |
 | 编译检查 | `tsc --noEmit` / `python -m py_compile` | 0 errors                  |
 | Lint     | `eslint .` / `ruff check .`             | 0 errors, warnings 可接受 |
 | 类型检查 | `typescript strict mode` / `mypy`       | 0 errors                  |
@@ -614,7 +625,7 @@ Step 7: 向用户确认："我已了解上次进度，从 XXX 继续？"
 ### 6.2 文档质量门禁
 
 | 检查项            | 标准                 |
-| ----------------- | -------------------- |
+| ---- | ---- |
 | YAML Front Matter | 完整且准确           |
 | 代码链接          | 可点击且指向正确行号 |
 | 截图/图表         | 清晰且有说明         |
@@ -638,7 +649,7 @@ Step 7: 向用户确认："我已了解上次进度，从 XXX 继续？"
 ### 7.1 AI 导师的承诺
 
 | 承诺领域               | 具体承诺                     |
-| ---------------------- | ---------------------------- |
+| ---- | ---- |
 | **认真对待每个配置项** | 不遗漏、不假设、逐一核实     |
 | **准确理解系统架构**   | 基于代码分析，不以偏概全     |
 | **提供专业建议**       | 给出方案的同时说明利弊取舍   |
@@ -649,7 +660,7 @@ Step 7: 向用户确认："我已了解上次进度，从 XXX 继续？"
 ### 7.2 用户的承诺
 
 | 承诺领域         | 具体承诺                     |
-| ---------------- | ---------------------------- |
+| ---- | ---- |
 | **提供最大支持** | 及时反馈、澄清疑问、确认方向 |
 | **多端环境认证** | 在多个环境中验证方案可行性   |
 | **尊重流程**     | 理解规范化带来的长期收益     |
@@ -701,12 +712,6 @@ A: 使用占位符格式：`${ENV_VAR_NAME}` 或 `[REDACTED]`。绝不记录真�
 **Q: 多个 AI 导师协作怎么办？**
 A: 每个导师使用独立的会话目录，通过总结文档进行衔接。冲突解决以代码仓库的实际状态为准。
 
-### C. 文档版本历史
-
-| 版本   | 日期       | 作者                | 变更内容 |
-| ------ | ---------- | ------------------- | -------- |
-| v1.0.0 | 2026-05-03 | YanYuCloudCube Team | 初始版本 |
-
 ---
 
 ## 结语
@@ -722,23 +727,23 @@ A: 每个导师使用独立的会话目录，通过总结文档进行衔接。�
 
 ---
 
-**文档维护**: 如需更新本文档，请遵循相同的文档规范，并记录变更历史。
+**文档维护**：如需更新本文档，请遵循《YYC³ 团队通用-标头标尾》规定的标头标尾规范，并在变更历史中记录变更。
 
 ---
 
-<div align="center">
+## 变更历史
 
-> 「**_YanYuCloudCube_**」言启象限 | 语枢未来
-> 「**_Words Initiate Quadrants, Language Serves as Core for the Future_**」
-> 「**_All things converge in cloud pivot; Deep stacks ignite a new era of intelligence_**」
-
-**© 2025-2026 YYC³ Team. All Rights Reserved.**
-
-</div>
+| 版本 | 日期 | 变更内容 | 作者 |
+| ---- | ---- | -------- | ---- |
+| v2.1.0 | 2026-11-01 | 统一标头标尾 · 品牌标识统一为 YYC³ · 排版与语法规范化 · 时间基准统一为 2026-11-01 | YYC³ Team |
 
 ---
 
-> ***YanYuCloudCube***
-> *言启象限 | 语枢未来*
-> *Words Initiate Quadrants, Language Serves as Core for Future*
-> *万象归元于云枢 | 深栈智启新纪元*
+<p align="center">
+  <b>YYC³</b>（YanYuCloudCube™ · 注册商标）<br>
+  言启象限 | 语枢未来<br>
+  <i>Words Initiate Quadrants, Language Serves as Core for Future</i><br>
+  万象归元于云枢 | 深栈智启新纪元<br>
+  <i>All things converge in cloud pivot; Deep stacks ignite a new era of intelligence</i><br>
+  <sub>© 2026 YanYuCloudCube™（YYC³）· <a href="mailto:admin@0379.email">admin@0379.email</a></sub>
+</p>

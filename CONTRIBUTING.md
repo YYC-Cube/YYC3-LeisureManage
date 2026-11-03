@@ -105,7 +105,7 @@ YYC3-LeisureManage/
 | `@yyc3/leisure-core`（已建） | `packages/leisure-core/` | 领域单源包：营业日/台费引擎/前置校验/枚举/API Client——四端唯一事实源，**任何端禁止复制实现** |
 | `leisure-api` | `services/leisure-api/` | NestJS 10 后端 |
 | `app-leisure-web` | `apps/app-leisure-web/` | React 19 Web 管理端 + PWA |
-| `app-mp-artist` | `apps/app-mp-artist/` | Taro 4 艺人小程序 |
+| `app-mp-artist` | `apps/app-mp-artist/` | Taro 4 销售经理小程序 |
 
 ### 规划文档修订规则（重要）
 

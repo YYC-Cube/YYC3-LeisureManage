@@ -1,27 +1,22 @@
 ---
-file: "YYC3-单元框架-审核验收.md"
-title: "YYC3-单元框架-审核验收"
-description: "YYC³ 项目闭环验收系统 — 测试框架搭建与配置审核标准（第五类验收阶段）"
-author: "YanYuCloudCube Team <admin@0379.email>"
-version: "v2.0.0"
-created: "2026-05-25"
-updated: "2026-05-30"
-status: "stable"
-license: "MIT"
-tags: [验收],[测试框架],[Vitest],[Playwright],[CI/CD],[工具链],[闭环]
+file: YYC3-单元框架-审核验收.md
+title: YYC³ 闭环验收第 5 阶段 — 单元框架审核验收
+description: YYC³ 闭环验收 — 测试框架搭建与配置审核标准
+author: YYC³ Team <admin@0379.email>
+version: v2.1.0
+created: 2026-11-01
+updated: 2026-11-01
+status: stable
+tags: [acceptance, 测试框架, Vitest, Playwright, CI/CD, 工具链, 闭环]
 category: acceptance
 language: zh-CN
 audience: developers,devops,qa-engineers
 complexity: advanced
 ---
 
-<div align="center">
+# YYC³ 闭环验收第 5 阶段 — 单元框架审核验收
 
-# YYC³（YanYuCloudCube）闭环验收系统
-
-## 第五类：单元框架审核验收
-
-> **_YanYuCloudCube_**
+> **_YYC³_**（YanYuCloudCube™ · 注册商标）
 > _言启象限 | 语枢未来_
 > **_Words Initiate Quadrants, Language Serves as Core for Future_**
 > _万象归元于云枢 | 深栈智启新纪元_
@@ -29,15 +24,12 @@ complexity: advanced
 
 ---
 
-| 属性         | 值                                    |
-| ------------ | ------------------------------------- |
-| **文档版本** | v1.0.0                                |
-| **发布日期** | 2026-05-25                            |
-| **验收阶段** | 第五阶段：测试框架类                     |
-| **验收性质** | 工具链完整性 · 配置正确性验证          |
-| **适用范围** | Vitest + Playwright + MSW + Testing Library |
+## 核心理念
 
-</div>
+**五高架构**：高可用 | 高性能 | 高安全 | 高扩展 | 高智能
+**五标体系**：标准化 | 规范化 | 自动化 | 可视化 | 智能化
+**五化转型**：流程化 | 数字化 | 生态化 | 工具化 | 服务化
+**五维评估**：时间维 | 空间维 | 属性维 | 事件维 | 关联维
 
 ---
 
@@ -68,20 +60,20 @@ complexity: advanced
 │              闭环验收系统流水线                               │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  第一类：代码语法测试核验 ✅                                  │
-│  第二类：功能逻辑验收标准 ✅                                  │
-│  第三类：测试用例审核验收 ✅                                  │
-│  第四类：组件测试验收标准 ✅                                  │
+│  第一阶段：代码语法测试核验 ✅                                  │
+│  第二阶段：功能逻辑验收标准 ✅                                  │
+│  第三阶段：测试用例审核验收 ✅                                  │
+│  第四阶段：组件测试验收标准 ✅                                  │
 │       ↓ 已通过                                              │
 │  ┌─────────────────────────────────────────────────────┐   │
-│  │  ⭐ 第五类：单元框架审核验收（当前阶段）               │   │
+│  │  ⭐ 第五阶段：单元框架审核验收（当前阶段）               │   │
 │  │  ├── Vitest 配置完整且优化                            │   │
 │  │  ├── Playwright 环境就绪                              │   │
 │  │  ├── CI/CD Pipeline 可运行                           │   │
 │  │  └── 工具链版本兼容                                  │   │
 │  └─────────────────────────────────────────────────────┘   │
 │                          ↓                                  │
-│  第六类：闭环验证验收标准                                    │
+│  第六阶段：闭环验证验收标准                                    │
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
 ```
@@ -716,7 +708,7 @@ node-linker=hoisted
 | **报告编号**   | RPT-FRAME-{YYYYMMDD}-{SEQUENCE}         |
 | **项目名称**   | {PROJECT_NAME}                          |
 | **报告日期**   | {YYYY-MM-DD HH:MM}                      |
-| **验收阶段**   | 第五类：单元框架审核验收                 |
+| **验收阶段**   | 第五阶段：单元框架审核验收                 |
 | **审核负责人** | {REVIEWER_NAME}                         |
 | **Git Commit** | {COMMIT_HASH}                           |
 
@@ -965,25 +957,21 @@ fi
 - [YYC3-闭环验证-验收标准.md](./YYC3-闭环验证-验收标准.md) - 后续阶段
 - [YYC3-全局统一-验收标准.md](./YYC3-全局统一-验收标准.md) - 总纲文档
 
-### C. 版本历史
+---
 
-| 版本   | 日期       | 变更内容                       | 作者                |
-| ------ | ---------- | -------------------------------- | ------------------- |
-| v1.0.0 | 2026-05-25 | 初始版本，建立框架审核验收标准 | YanYuCloudCube Team |
+## 变更历史
+
+| 版本 | 日期 | 变更内容 | 作者 |
+| ---- | ---- | -------- | ---- |
+| v2.1.0 | 2026-11-01 | 统一标头标尾 · 复用核心理念块 · 品牌统一为 YYC³ · 排版语法规范化 · 时间基准 2026-11-01 | YYC³ Team |
 
 ---
 
-<div align="center">
-
-**© 2026 YanYuCloudCube Team**
-**言启象限 | 语枢未来**
-**Words Initiate Quadrants, Language Serves as Core for Future**
-
-</div>
-
----
-
-> ***YanYuCloudCube***
-> *言启象限 | 语枢未来*
-> *Words Initiate Quadrants, Language Serves as Core for Future*
-> *万象归元于云枢 | 深栈智启新纪元*
+<p align="center">
+  <b>YYC³</b>（YanYuCloudCube™ · 注册商标）<br>
+  言启象限 | 语枢未来<br>
+  <i>Words Initiate Quadrants, Language Serves as Core for Future</i><br>
+  万象归元于云枢 | 深栈智启新纪元<br>
+  <i>All things converge in cloud pivot; Deep stacks ignite a new era of intelligence</i><br>
+  <sub>© 2026 YanYuCloudCube™（YYC³）· <a href="mailto:admin@0379.email">admin@0379.email</a></sub>
+</p>

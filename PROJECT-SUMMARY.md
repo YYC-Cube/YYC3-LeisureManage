@@ -23,7 +23,7 @@
 **验证:tsc 严格模式干净 + vitest 43/43**
 
 ### 2.2 后端 `services/leisure-api`(28 源文件 · 16 业务模块)
-NestJS + Prisma + **PostgreSQL 15**/Redis:auth(JWT+用户名/手机号登录+**首登强制改密**+微信绑定+跨店工单)· artist(档案 94 字段/软删/批量/**必填项按门店配置校验**)· attendance(报备 8 枚举/汇总矩阵/补打卡/**开放时段+主管审核流**/实时 5 色)· **session(上下钟/串台/方案甲计费入房账/离线兜底/quoteIn 只读报价/艺人自助下钟)** · **stage-fee(规则/时段定价槽位/充值(五通道)/手动扣费审批/流水/冲正)** · **room(方案甲核心:房账开/关房/结算单预览/关房统一结算 ROOM_SETTLE/清扫/艺人自点单/商品目录/叫钟+语音盒子分发)** · **dispatch(轮台派单引擎:队列/推荐/模式校验/日志)** · **ticket(规则 CRUD/购买/核销/双记录/余额含过期归零)** · **showcase(投放[仅审核通过]/列表/结束)** · **booking(创建/流转/终态锁定)** · **review(评价录入/区间列表/均分分布/艺人端 my)** · store-config(艺人设置 8 项 9/9 真消费)· approval · store · taxonomy · report(8 张+双轨对账+14 天门禁)· 日切 job(汇总+对账自动快照)
+NestJS + Prisma + **PostgreSQL 15**/Redis:auth(JWT+用户名/手机号登录+**首登强制改密**+微信绑定+跨店工单)· artist(档案 94 字段/软删/批量/**必填项按门店配置校验**)· attendance(报备 8 枚举/汇总矩阵/补打卡/**开放时段+主管审核流**/实时 5 色)· **session(上下钟/串台/方案甲计费入房账/离线兜底/quoteIn 只读报价/销售经理自助下钟)** · **stage-fee(规则/时段定价槽位/充值(五通道)/手动扣费审批/流水/冲正)** · **room(方案甲核心:房账开/关房/结算单预览/关房统一结算 ROOM_SETTLE/清扫/销售经理自点单/商品目录/叫钟+语音盒子分发)** · **dispatch(轮台派单引擎:队列/推荐/模式校验/日志)** · **ticket(规则 CRUD/购买/核销/双记录/余额含过期归零)** · **showcase(投放[仅审核通过]/列表/结束)** · **booking(创建/流转/终态锁定)** · **review(评价录入/区间列表/均分分布/销售端 my)** · store-config(销售经理设置 8 项 9/9 真消费)· approval · store · taxonomy · report(8 张+双轨对账+14 天门禁)· 日切 job(汇总+对账自动快照)
 **验证:tsc 干净 · prisma generate ✓ · e2e 42/42(9 套件,PG15 真库;含★用例/方案甲/P0 三线/台票/展示/预约/评价/钳位/预览/盒子/门禁/改密/设置消费面/轮台)**
 **dev 联调件:`scripts/mock-voice-box.mjs`(本机回环 mock 盒子)· `scripts/apply-pg-grants.sql`(运行账号只增表收权)**
 
@@ -34,12 +34,12 @@ A1–A20 + P0 + III 期起步 + **设计体系对齐(2026-11-02 四会话并行�
 BottomNav 断点布局 + manifest/InstallPrompt + **A15 报备现场屏**(全屏二维码)
 **Service Worker(public/sw.js,零依赖)**:导航网络优先→缓存壳 · /assets/* 缓存优先(hash 不可变) · /api/v1 GET 网络优先+离线回缓存+503 信封 · 写操作直连;SW no-cache 头(边缘 nginx 定向 location);更新流=controllerchange 自动重载+toast;离线横幅(useOnlineStatus)
 
-### 2.5 艺人小程序 `apps/app-mp-artist`(Taro4+React,9 源文件)
+### 2.5 销售经理小程序 `apps/app-mp-artist`(Taro4+React,9 源文件)
 B1 资料自助绑定 · B2 扫码签到/签退 · B4 我的流水 · **B7 我的台票(余额含有效期+购买/使用流水)**;scene HMAC 防伪
 **构建:`pnpm build:h5` ✓**(2026-11-01 修复 webpackbar 5 × webpack ≥5.10x 的 ProgressPlugin 校验崩溃——config/index.ts 用 `plugin.init` 在 validate 钩子阶段做 options 垫片,不改依赖/lockfile)
 
 ### 2.6 方案甲资金闭环(2026-11-01 裁决并落地)
-**时间费即台费:下钟计入房账(不落流水)→ 关房统一结算(现金/台费抵扣/混合)→ ROOM_SETTLE 流水(逐艺人,只增)**;废止原「下钟即扣 SESSION_DEDUCT」。
+**时间费即台费:下钟计入房账(不落流水)→ 关房统一结算(现金/台费抵扣/混合)→ ROOM_SETTLE 流水(逐销售经理,只增)**;废止原「下钟即扣 SESSION_DEDUCT」。
 
 ---
 
@@ -75,8 +75,8 @@ LEISURE_E2E_PWD_ROTATE_A='<强密码A>' LEISURE_E2E_PWD_ROTATE_B='<强密码B>' 
 | 领域包 | tsc / vitest | ✅ / ✅ 43/43 |
 | 后端 | tsc / prisma generate / e2e | ✅ / ✅ / ✅ 42/42(PostgreSQL 15) |
 | 安全基线 | 首登强制改密(40302)· prod 启动硬化(拒开发默认密钥/强制 CORS 白名单/Swagger 关)· PG 运行账号只增表收权 | ✅ e2e + 启动校验实测 |
-| 门店设置 | 8 项 9/9 真消费:必填项校验 · 报备时段/审核流 · 艺人自助下钟 · 轮台派单引擎(40914)+ 主管轮台报表 | ✅ e2e |
-| 方案甲 | 下钟不落流水基线 · ROOM_SETTLE 逐艺人 · 余额扣减一致 · 重复关房拒绝 · 超限 40910 | ✅ 全部有断言 |
+| 门店设置 | 8 项 9/9 真消费:必填项校验 · 报备时段/审核流 · 销售经理自助下钟 · 轮台派单引擎(40914)+ 主管轮台报表 | ✅ e2e |
+| 方案甲 | 下钟不落流水基线 · ROOM_SETTLE 逐销售经理 · 余额扣减一致 · 重复关房拒绝 · 超限 40910 | ✅ 全部有断言 |
 | 闭环链 | 充值(五通道)→开房(进房即上钟)→自点单→**结算单预览(与真结算同额)**→关房 FEE_DEDUCT→ROOM_SETTLE→清扫→空闲 | ✅ e2e 全链 |
 | P0 三线 | 钟房大屏语音叫钟 · 时段定价槽位覆盖 · 离线兜底幂等重放 · 双轨对账 MATCHED | ✅ e2e |
 | II 期计费 | 最低消费兜底 / 封顶压值 / 后台可编辑(预设 0)· 收费通道 现金/转账/自定义1-3 清单校验 | ✅ e2e(40911 余额/通道清单拒) |
@@ -108,7 +108,7 @@ code/mp-artist     → ../../YYC3-DeepStack-Matrix/apps/app-mp-artist
 
 ## 七、下一步(优先级)
 
-1. **上线现场动作**(软件侧 P0 已清):`.env.production` 填真值密钥(入 ~/.yyc3-keybackup)→ 主库 `migrate deploy` + `NODE_ENV=prod seed` + grants → NAS 首次构建(`deploy/nas` 手册 §4)→ 冒烟清单 → 网关反代 + CORS 正式域名;艺人端 H5 `API_BASE` 改网关域名重构建
+1. **上线现场动作**(软件侧 P0 已清):`.env.production` 填真值密钥(入 ~/.yyc3-keybackup)→ 主库 `migrate deploy` + `NODE_ENV=prod seed` + grants → NAS 首次构建(`deploy/nas` 手册 §4)→ 冒烟清单 → 网关反代 + CORS 正式域名;销售端 H5 `API_BASE` 改网关域名重构建
 2. 语音盒子**真机**接线:改 `VOICE_BOX_URL` → `POST /voice-box/test`
 3. 双轨对账 14 天试点运行(每日录对侧 4 数;达标后切换演练)
-4. P1 续:台票抵扣并入结算 · 台票两张报表进报表中心 + xlsx · 艺人订单视图 · 评价关联房账 · 预约到店联动叫钟/锁钟;III 期:CRM · 交接班 · 提成引擎 · 推送矩阵
+4. P1 续:台票抵扣并入结算 · 台票两张报表进报表中心 + xlsx · 销售经理订单视图 · 评价关联房账 · 预约到店联动叫钟/锁钟;III 期:CRM · 交接班 · 提成引擎 · 推送矩阵

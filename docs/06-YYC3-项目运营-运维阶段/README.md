@@ -28,7 +28,7 @@ phase: 项目运营-维护阶段
 
 ## 目录职责
 
-本目录存放 YYC³ LeisureManage（艺人管理系统）**生产系统运维阶段全量文档**，遵循《YYC³ 团队通用-命名规范》《YYC³ 团队通用-标头标尾》《YYC³ 团队通用-文档闭环》。代码与部署资产真源在 `personal/YYC3-DeepStack-Matrix`（代码仓），本目录承载运维口径（How-to-Run）。
+本目录存放 YYC³ LeisureManage（销售管理系统）**生产系统运维阶段全量文档**，遵循《YYC³ 团队通用-命名规范》《YYC³ 团队通用-标头标尾》《YYC³ 团队通用-文档闭环》。代码与部署资产真源在 `personal/YYC3-DeepStack-Matrix`（代码仓），本目录承载运维口径（How-to-Run）。
 
 ## 文档清单
 
@@ -45,7 +45,7 @@ phase: 项目运营-维护阶段
 
 ## 快速入口
 
-- **系统入口**: <https://lm.0379.world>（Web 管理端）· <https://lm.0379.pro>（同配置别名）/ 艺人端 H5: `/m/`
+- **系统入口**: <https://lm.0379.world>（Web 管理端）· <https://lm.0379.pro>（同配置别名）/ 销售端 H5: `/m/`
 - **代码仓**: `personal/YYC3-DeepStack-Matrix`（pnpm monorepo）
 - **密钥真值**: `~/.yyc3-keybackup/leisure-prod.env`（600；本机生成器 `scripts/gen-prod-secrets.sh`）
 - **文档关联**: 需求全集 V3.1 第十四章《实现状态对照》· 《15-全链路审核与闭环分析》（同仓 `YYC3-LeisureManage-项目规划/`）
