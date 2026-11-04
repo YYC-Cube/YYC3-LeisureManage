@@ -1129,14 +1129,16 @@ calcBillHours(actualMinutes, N = 15):
 
 | ID | 模块 | 状态 | 说明 |
 | --- | --- | --- | --- |
-| `SPLIT-01` | 分账方案(/split) | ✅ | SplitPlan:类目(6 预置)×周期 DRAFT→ACTIVE→ARCHIVED;规则 PERCENT/FIXED/TIERED×支付方式×奖惩方向 |
+| `SPLIT-01` | 分账方案(/split) | ✅ | SplitPlan:类目(6 预置)×周期 DRAFT→ACTIVE→ARCHIVED;规则 PERCENT/FIXED/TIERED×支付方式×奖惩方向;**预算字段(budget_amount,S3+)** |
 | `SPLIT-02` | SESSION 计提 | ✅ | 关房触发按销售经理分组计提;幂等防双计(同场次同类目唯一);TIERED 阶梯落档 |
-| `SPLIT-03` | 手动条目+双人复核 | ✅ | MANUAL 条目≥阈值(PENDING)→ decideEntry 双人复核(操作/复核人不同);冲正=反向条目只增 |
-| `SPLIT-04` | 结算与支付 | ✅ | SplitSettlement CONFIRMED→PAID;OFFSET 支付自动写 MANUAL_DEDUCT 冲抵(只增流水) |
-| `SPLIT-05` | 报表+三向对账 | ✅ | 人/期/类目聚合+entries/settlements 两数据源;`split/balance` 三向对账(计提净=已结=已付)挂接日切 job stats.splitCheck.balanced |
+| `SPLIT-03` | 手动条目+双人复核 | ✅ | MANUAL 条目≥阈值(PENDING)→ decideEntry 双人复核(操作/复核人不同);冲正=反向条目只增;/split 页待复核区块 |
+| `SPLIT-04` | 结算与支付 | ✅ | SplitSettlement CONFIRMED→PAID;OFFSET 支付自动写 MANUAL_DEDUCT 冲抵(只增流水);/split 页生成/支付弹窗 |
+| `SPLIT-05` | 报表+三向对账 | ✅ | 人/期/类目聚合+entries/settlements 两数据源;`split/balance` 三向对账挂接日切 job stats.splitCheck.balanced;**不平衡自动发管理职级告警通告(幂等)**;/split 页对账卡 |
 | `SPLIT-06` | H5「我的分成」 | ✅ | GET /split/my(ARTIST 强制本人);H5 我的→我的分成;`TARO_APP_API_BASE` 内联发布 |
-| `HANDOVER-01` | 交接班对账(/handover) | ✅ | 创建(值班人/营业日归属)→四合计(房费/点单/台票/手动)+进行中订单数→确认锁定;CSV 导出(BOM) |
-| `HANDOVER-02` | 打印版式 | ✅ | `/handover/:id/print` 签字栏版式(@media print);从确认页直达 |
+| `SPLIT-07` | 预算对比+结算导出(S3+) | ✅ | listPlans 返回 budget/actual(达成率前端进度条,超支红);GET /split/settlements/:id/export xlsx·csv(头+条目明细) |
+| `HANDOVER-01` | 交接班对账(/handover) | ✅ | 创建(值班人/营业日归属)→四合计+进行中订单数→**接班码确认(6 位码生成/验码)**锁定;CSV 导出(BOM) |
+| `HANDOVER-02` | 打印版式 | ✅ | `/handover/:id/print` 签字栏版式(@media print);OPEN 单打印页显示接班码大字(可扫码枪录入) |
+| `HANDOVER-03` | 资金域入口(深化) | ✅ | 分账/交接班移「台费资金」域(Sidebar 单源;移动工作台资金分组自动跟随;HandCoins/ReceiptText 图标) |
 
 ### 8.5 深度审核引用
 
