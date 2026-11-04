@@ -6,3 +6,8 @@
 *.zcode-session
 
 # 本项目暂无构建产物(纯文档);后续工程目录由各自 .gitignore 管辖
+
+# 私人资料(Owner 裁决 2026-11-04:仅入 NAS GitBucket 快照仓,严禁入 GitHub)
+My-*/
+docs/My-*/
+public/My-*
