@@ -277,6 +277,8 @@ flowchart LR
 
 ### 2.4 移动端功能登记表
 
+> **状态标注（2026-11-04 审核）**：本表为**行业取证规划清单（全部 ⬜ 未实现）**——对应移动管理 App 未开发；Web 移动工作台（/m/workbench + /m/board）已承接其中：房态图 / 工作台四页签骨架 / 上下钟 / 预约 / 实时状态 / 轮房等能力，逐 ID 对应关系待移动 App 立项时映射。
+
 #### 2.4.1 首页三入口与订房
 
 | ID            | 入口 / 功能 | 释义                                                                 |
@@ -1115,13 +1117,26 @@ calcBillHours(actualMinutes, N = 15):
 | `RESOURCE-01` | 资源经理资料管理 | ✅ | artist.line=RESOURCE 过滤视图(复刻销售经理档案;新建自动归线) |
 | `RESOURCE-02` | 资源经理等级 | ✅ | 等级全域共用,入口按条线挂载 |
 | `RESOURCE-03` | 资源经理组别 | ✅ | 同上 |
-| `RESOURCE-04` | 条线衔接财务分账 | 📋 | 纳入分账可选部门/分组(见《17-财务分账模块-闭环规划》) |
+| `RESOURCE-04` | 条线衔接财务分账 | ✅ | 分账方案/规则支持按部门/分组条线选取(资源经理与销售经理同域可选;2026-11-04 随分账 S1-S2 上线) |
 
 ### 8.4 命名变更与其他
 
 - **M04/A20「销售经理上下钟」→「销售经理轮房」**(界面与菜单改名;接口/表不变,标规 6.3 代码保留原则适用)
 - 移动工作台 QUICK「上下钟」→「轮房」
-- 新增规划:`FINANCE-SPLIT`(财务分账,见《17-财务分账模块-闭环规划》,状态 📋 planned,III-B)
+- 新增规划:`FINANCE-SPLIT`(财务分账,见《17-财务分账模块-闭环规划》;**S1-S2 已于 2026-11-04 上线**,ID 登记见 8.6;S3 演进见 17 号 §III-B)
+
+### 8.6 财务分账+交接班系列(SPLIT-*/HANDOVER-*;资金域,守卫 setting:manage)
+
+| ID | 模块 | 状态 | 说明 |
+| --- | --- | --- | --- |
+| `SPLIT-01` | 分账方案(/split) | ✅ | SplitPlan:类目(6 预置)×周期 DRAFT→ACTIVE→ARCHIVED;规则 PERCENT/FIXED/TIERED×支付方式×奖惩方向 |
+| `SPLIT-02` | SESSION 计提 | ✅ | 关房触发按销售经理分组计提;幂等防双计(同场次同类目唯一);TIERED 阶梯落档 |
+| `SPLIT-03` | 手动条目+双人复核 | ✅ | MANUAL 条目≥阈值(PENDING)→ decideEntry 双人复核(操作/复核人不同);冲正=反向条目只增 |
+| `SPLIT-04` | 结算与支付 | ✅ | SplitSettlement CONFIRMED→PAID;OFFSET 支付自动写 MANUAL_DEDUCT 冲抵(只增流水) |
+| `SPLIT-05` | 报表+三向对账 | ✅ | 人/期/类目聚合+entries/settlements 两数据源;`split/balance` 三向对账(计提净=已结=已付)挂接日切 job stats.splitCheck.balanced |
+| `SPLIT-06` | H5「我的分成」 | ✅ | GET /split/my(ARTIST 强制本人);H5 我的→我的分成;`TARO_APP_API_BASE` 内联发布 |
+| `HANDOVER-01` | 交接班对账(/handover) | ✅ | 创建(值班人/营业日归属)→四合计(房费/点单/台票/手动)+进行中订单数→确认锁定;CSV 导出(BOM) |
+| `HANDOVER-02` | 打印版式 | ✅ | `/handover/:id/print` 签字栏版式(@media print);从确认页直达 |
 
 ### 8.5 深度审核引用
 
