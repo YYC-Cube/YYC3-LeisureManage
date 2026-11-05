@@ -3,7 +3,7 @@
 # 用途:把整个文档仓(含 docs/My-* 私人资料)打包推送到 NAS GitBucket 私有仓
 # 红线:My-* 仅入 NAS 仓;主仓 .gitignore 已挡(绝不上 GitHub)
 # 依赖(环境变量,凭据不入本脚本/不入仓):
-#   GITBUCKET_URL(如 http://100.65.172.88:8080)/ GITBUCKET_USER(如 root)/ GITBUCKET_PASSWORD
+#   GITBUCKET_URL(**标准=Tailscale http://100.65.172.88:8080**;2026-11-05 baseUrl 已置空双链通吃,LAN 192.168.3.45:8080 亦可)/ GITBUCKET_USER(如 root)/ GITBUCKET_PASSWORD
 #   REPO_NAME(默认 YYC3-Leisuremanage;需已在 GitBucket 网页建仓)
 # 用法:GITBUCKET_URL=… GITBUCKET_USER=root GITBUCKET_PASSWORD=… bash nas-gitbucket-sync.sh
 set -euo pipefail
